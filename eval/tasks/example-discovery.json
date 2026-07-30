@@ -1,0 +1,11 @@
+{
+  "id": "example-discovery",
+  "title": "Diagnose intermittent test failure in CI",
+  "category": "discovery",
+  "prompt": "The integration tests pass locally but fail intermittently in CI. The failure is always in the payment webhook tests, but different assertions fail each time. Sometimes it's a timeout, sometimes a wrong status code. Figure out why and fix it.",
+  "repo_path": "/path/to/target/repo",
+  "baseline_sha": "abc123",
+  "ground_truth_sha": "def456",
+  "suite_state_at_baseline": "2 flaky tests in payment suite",
+  "notes": "Discovery-shaped: cause unknown, requires investigation. Replace with real repo."
+}

@@ -1,0 +1,11 @@
+{
+  "id": "example-feature",
+  "title": "Add rate limiting to public API endpoints",
+  "category": "feature",
+  "prompt": "Add rate limiting to all public API endpoints. Use a sliding window of 100 requests per minute per API key. Return 429 with a Retry-After header when exceeded. The rate limiter should be configurable via environment variables.",
+  "repo_path": "/path/to/target/repo",
+  "baseline_sha": "abc123",
+  "ground_truth_sha": "def456",
+  "suite_state_at_baseline": "all passing",
+  "notes": "Spans middleware, config, and test modules. Replace with real repo."
+}

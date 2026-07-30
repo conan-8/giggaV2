@@ -1,0 +1,11 @@
+{
+  "id": "example-bugfix",
+  "title": "Fix null pointer in user authentication handler",
+  "category": "bugfix",
+  "prompt": "The login endpoint crashes with a null pointer when the session token is expired but the user record still exists. Fix the crash and add a regression test.",
+  "repo_path": "/path/to/target/repo",
+  "baseline_sha": "abc123",
+  "ground_truth_sha": "def456",
+  "suite_state_at_baseline": "all passing",
+  "notes": "Replace repo_path and SHAs with real values from target repo history."
+}
