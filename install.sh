@@ -38,4 +38,15 @@ https://opencode.ai and configure a provider before running a pipeline.
 EOF
 fi
 
+# Register the GIGGA agent + sidebar plugin with opencode (no-op harmlessly if
+# opencode is not installed yet — safe to re-run `gigga2 install` later).
+if command -v opencode >/dev/null 2>&1; then
+    if command -v gigga2 >/dev/null 2>&1; then
+        gigga2 install || true
+    else
+        "$HOME/.local/bin/gigga2" install 2>/dev/null || true
+    fi
+fi
+
 echo "==> Done. Try: gigga2 --help"
+echo "==> opencode integration: restart opencode, then Tab to the red GIGGA agent."

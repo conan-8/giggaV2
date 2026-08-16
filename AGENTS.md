@@ -25,6 +25,8 @@ gigga2/
   report.py     APPLY and HALT reports (§4.10, §4.HALT)
   metrics.py    instrumentation + timeline (§9)
   config.py     ~/.gigga2 config, model tiers (§8)
+  installer.py  opencode integration: gigga2 install/uninstall
+  assets/       GIGGA.md (red primary agent) + gigga-flow.tsx (sidebar flowchart)
 eval/           eval harness + task packs (§10)
 docs/           master plan + model allocation rationale (§8)
 ```

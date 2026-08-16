@@ -146,6 +146,18 @@ def cmd_rates(args) -> int:
     return 0
 
 
+def cmd_install(args) -> int:
+    from .installer import install
+    print(json.dumps(install(), indent=2))
+    return 0
+
+
+def cmd_uninstall(args) -> int:
+    from .installer import uninstall
+    print(json.dumps(uninstall(), indent=2))
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(prog="gigga2", description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -190,6 +202,12 @@ def main(argv: list[str] | None = None) -> int:
 
     p = sub.add_parser("rates", help="cross-run instrumentation rates (§9)")
     p.set_defaults(fn=cmd_rates)
+
+    p = sub.add_parser("install", help="register the red GIGGA primary agent + sidebar flowchart plugin in opencode")
+    p.set_defaults(fn=cmd_install)
+
+    p = sub.add_parser("uninstall", help="remove the opencode agent + sidebar plugin")
+    p.set_defaults(fn=cmd_uninstall)
 
     args = ap.parse_args(argv)
     return args.fn(args)

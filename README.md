@@ -22,6 +22,22 @@ uv tool install git+https://github.com/conan-8/giggaV2.git
 **Requirements:** Python 3.9+, git, and the [opencode](https://opencode.ai) CLI with
 a configured provider (gigga2 dispatches all of its agents through opencode).
 
+## opencode integration
+
+The installer also runs `gigga2 install`, which registers two things in
+`~/.config/opencode`:
+
+- **A red GIGGA primary agent** (`agents/GIGGA.md`). Restart opencode and press
+  **Tab** to cycle to it, exactly like `build` or `plan`. Give it a task in
+  natural language; it launches and shepherds the pipeline for you, asks you the
+  CLARIFY questions when the pipeline blocks, and reports the final branch.
+- **A sidebar stage flowchart** (`gigga/gigga-flow.tsx`, wired via `tui.json`).
+  While a run is active, the right-hand sidebar shows the pipeline as a live
+  flowchart — done stages in green, the current stage in red, pending stages
+  dimmed, CLARIFY flagged as *waiting on you*.
+
+Remove both with `gigga2 uninstall`.
+
 ## Use
 
 ```bash
@@ -33,6 +49,8 @@ gigga2 timeline --dir runs/my-run      # journal, one line per event, elapsed of
 gigga2 rollback --dir runs/my-run      # remove every branch/worktree the run created
 gigga2 validate-plan --dir runs/my-run # computer-run plan validators
 gigga2 rates                           # cross-run instrumentation (fork/fasttrack/cache rates)
+gigga2 install                         # register the red GIGGA agent + sidebar plugin in opencode
+gigga2 uninstall                       # remove them
 ```
 
 A run ends `DONE` (a reviewable branch `g2/<run_id>/result` — never merged, never

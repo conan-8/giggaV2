@@ -16,3 +16,6 @@ gigga2 = "gigga2.cli:main"
 
 [tool.setuptools.packages.find]
 include = ["gigga2*"]
+
+[tool.setuptools.package-data]
+gigga2 = ["assets/*"]

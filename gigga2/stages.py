@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import json
 import re
+import sys
 import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
@@ -518,6 +519,23 @@ class Pipeline:
                 encoding="utf-8")
             s.append("assumptions",
                      f"{n_blocking} blocking question(s) defaulted in non-interactive mode")
+        elif not sys.stdin.isatty():
+            # Headless (driven by an agent/TUI): publish the questions and wait
+            # for answers.md to appear. Human latency is logged separately (§5.5).
+            import sys
+            if answers_path.exists():
+                answers_path.unlink()
+            s.emit("clarify_waiting", {"questions": str(questions_path),
+                                       "answers": str(answers_path)})
+            print(f"CLARIFY: {n_blocking} blocking question(s) in {questions_path}",
+                  file=sys.stderr)
+            print(f"CLARIFY: write answers to {answers_path} to continue",
+                  file=sys.stderr)
+            t0 = time.time()
+            while not answers_path.exists():
+                time.sleep(5)
+            s.add_timing("CLARIFY", human_s=time.time() - t0)
+            s.emit("clarify_answered", {"answers": str(answers_path)})
         else:
             # One batched interaction — human latency dwarfs everything else (§4.4).
             import sys
