@@ -29,7 +29,13 @@ from pathlib import Path
 EVAL_DIR = Path(__file__).parent
 TASKS_DIR = EVAL_DIR / "tasks"
 RESULTS_DIR = EVAL_DIR / "results"
-RUNNER = Path.home() / ".config/opencode/gigga2/runner.py"
+
+
+def runner_cmd():
+    """Resolve the gigga2 runner: installed CLI on PATH, else python -m gigga2."""
+    if shutil.which("gigga2"):
+        return ["gigga2"]
+    return [sys.executable, "-m", "gigga2"]
 
 ARMS = ["v2", "v1", "cheap", "strong"]
 
@@ -59,11 +65,12 @@ def run_arm_v2(task, clone_path, run_dir):
 
     start = time.time()
     result = subprocess.run(
-        ["python3", str(RUNNER), "start",
+        runner_cmd() + ["start",
          "--repo", str(clone_path),
          "--request-file", str(req_file),
          "--dir", str(run_dir / "state"),
-         "--skip-baseline"],
+         "--skip-baseline",
+         "--non-interactive"],
         capture_output=True, text=True,
     )
     wall = time.time() - start
@@ -72,7 +79,16 @@ def run_arm_v2(task, clone_path, run_dir):
     try:
         output = json.loads(result.stdout)
     except json.JSONDecodeError:
-        output = {"raw": result.stdout, "stderr": result.stderr}
+        # tolerate log lines around the JSON summary: take the last {...} block
+        import re
+        blocks = re.findall(r"\{.*\}", result.stdout, re.S)
+        if blocks:
+            try:
+                output = json.loads(blocks[-1])
+            except json.JSONDecodeError:
+                output = {"raw": result.stdout[-2000:], "stderr": result.stderr[-2000:]}
+        else:
+            output = {"raw": result.stdout[-2000:], "stderr": result.stderr[-2000:]}
 
     return {
         "wall_clock_s": round(wall, 2),

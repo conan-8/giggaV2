@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gigga2"
+version = "2.0.0"
+description = "GIGGA v2 — an agent pipeline for hard software engineering work in existing repositories. Research once. Execute mechanically."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+dependencies = []  # stdlib only; agents are dispatched via the opencode CLI
+
+[project.scripts]
+gigga2 = "gigga2.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["gigga2*"]
